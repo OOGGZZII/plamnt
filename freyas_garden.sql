@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `freyas_garden`
 --
+CREATE DATABASE IF NOT EXISTS `freyas_garden` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `freyas_garden`;
 
 -- --------------------------------------------------------
 
@@ -27,12 +29,13 @@ SET time_zone = "+00:00";
 -- Tábla szerkezet ehhez a táblához `article`
 --
 
-CREATE TABLE `article` (
-  `id` int(11) NOT NULL,
-  `title` tinytext NOT NULL,
-  `plant_id` int(11) DEFAULT NULL COMMENT 'plant froein key (null)',
-  `source` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE IF NOT EXISTS `article` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` tinytext NOT NULL COMMENT 'A cikk címe',
+  `plant_id` int(11) DEFAULT NULL COMMENT 'plant tábla ideken kulcsa (alapértelmezett null)',
+  `source` text NOT NULL COMMENT 'A cikk forrásának helye',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -40,11 +43,12 @@ CREATE TABLE `article` (
 -- Tábla szerkezet ehhez a táblához `plant`
 --
 
-CREATE TABLE `plant` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `plant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` int(11) NOT NULL,
-  `latin_name` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `latin_name` int(11) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -52,16 +56,17 @@ CREATE TABLE `plant` (
 -- Tábla szerkezet ehhez a táblához `post`
 --
 
-CREATE TABLE `post` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `post` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `city` tinytext NOT NULL,
   `title` tinytext NOT NULL,
   `plant` int(11) NOT NULL,
   `description` text NOT NULL,
-  `media` int(11) NOT NULL,
-  `sell` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `media` int(11) NOT NULL COMMENT 'képek helye? még nem végleges',
+  `sell` tinyint(1) NOT NULL COMMENT '0 = vétel, 1 = eladás',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -69,14 +74,15 @@ CREATE TABLE `post` (
 -- Tábla szerkezet ehhez a táblához `user`
 --
 
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` tinytext NOT NULL,
   `email` tinytext NOT NULL,
   `city` tinytext NOT NULL,
   `birthdate` date NOT NULL,
-  `password` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `password` varchar(255) NOT NULL COMMENT 'hashelt jelszó',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -84,75 +90,15 @@ CREATE TABLE `user` (
 -- Tábla szerkezet ehhez a táblához `user_plants`
 --
 
-CREATE TABLE `user_plants` (
+CREATE TABLE IF NOT EXISTS `user_plants` (
   `user_id` int(11) NOT NULL,
-  `plant_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `plant_id` int(11) NOT NULL,
+    PRIMARY KEY (`user_id`, `plant_id`),
+    KEY `user_id` (`user_id`),
+   KEY `plant_id` (`plant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_unicode_ci;
 
---
--- Indexek a kiírt táblákhoz
---
 
---
--- A tábla indexei `article`
---
-ALTER TABLE `article`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plant.id` (`plant_id`) USING BTREE;
-
---
--- A tábla indexei `plant`
---
-ALTER TABLE `plant`
-  ADD PRIMARY KEY (`id`);
-
---
--- A tábla indexei `post`
---
-ALTER TABLE `post`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- A tábla indexei `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
-
---
--- A tábla indexei `user_plants`
---
-ALTER TABLE `user_plants`
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `plant_id` (`plant_id`);
-
---
--- A kiírt táblák AUTO_INCREMENT értéke
---
-
---
--- AUTO_INCREMENT a táblához `article`
---
-ALTER TABLE `article`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT a táblához `plant`
---
-ALTER TABLE `plant`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT a táblához `post`
---
-ALTER TABLE `post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT a táblához `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -162,7 +108,7 @@ ALTER TABLE `user`
 -- Megkötések a táblához `article`
 --
 ALTER TABLE `article`
-  ADD CONSTRAINT `article_ibfk_1` FOREIGN KEY (`plant_id`) REFERENCES `plant` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `fk_article_plant` FOREIGN KEY (`plant_id`) REFERENCES `plant` (`id`) ON DELETE SET NULL;
 
 --
 -- Megkötések a táblához `post`
