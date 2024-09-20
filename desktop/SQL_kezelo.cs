@@ -19,9 +19,9 @@ namespace bolyGO_app
 		private static MySqlConnection conn = new MySqlConnection(connStr);
 		private static MySqlCommand cmd;
 
-		private static string dbname = "freas_garden";
+		private static string dbname = "freyas_garden";
 
-		private static MySqlDataAdapter mda = null;
+		//private static MySqlDataAdapter mda = null;
 		//BindingSource bsource = new BindingSource();
 		//DataSet ds = null;
 
@@ -50,7 +50,7 @@ namespace bolyGO_app
 			conn = new MySqlConnection(connStr);
 			try
 			{
-				runCommand(new StreamReader($"{dbname}.sql").ReadToEnd());
+				runCommand(new StreamReader($"../../../{dbname}.sql").ReadToEnd());
 				conn = new MySqlConnection($"{connStr}; database='{dbname}'");
 				//visszadobja a főprogramnak az errort ami majd kezeli
 			}

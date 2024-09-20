@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bolyGO_app;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,11 +11,16 @@ using System.Windows.Forms;
 
 namespace desktop
 {
-	public partial class Form1 : Form
+	public partial class frm_desktop : Form
 	{
-		public Form1()
+		public frm_desktop()
 		{
 			InitializeComponent();
+		}
+
+		private void frm_desktop_Load(object sender, EventArgs e)
+		{
+			SQLKezelo.createDB(82);
 		}
 	}
 }
