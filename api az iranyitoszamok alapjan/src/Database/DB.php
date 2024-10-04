@@ -6,7 +6,7 @@ class DB
     const USER = "root";
     const PASSWORD = null;
 
-    const DATABASE = "freyas_database";
+    const DATABASE = "freyas_garden";
     protected $mysqli;
 
     function __construct($host = self::HOST, $user = self::USER, $password = self::PASSWORD, $database = self::DATABASE)
