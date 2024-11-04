@@ -5,10 +5,11 @@
   - out:succes
 ## login
   - post
-  - in: email / username, hash(password)
-  - out: token
+  - in: email / username, hash(password), (adminMode?)
+  - out: token or whyNotWorky
 ## logout
   - that wont be an endpoint just delete the token i guess 
 ## getArticle\{articlenumber}
   - get
-  - out:
+  - out: link to article.html on  the server?
+  - 
