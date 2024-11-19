@@ -2,11 +2,11 @@
 ## register
 - post
 - in: email, username, hash(password)
-- out: 200 ok / 400 
+- out: 200 ok (email megerősítés)/ 400 
 ## login
 - post
-- in: email / username, hash(password), (adminMode?)
-- out: 200 token / 401 incorrect email or password
+- in: email / username, hash(password), 
+- out: 200 token (adminMode?)/ 401 incorrect email or password
 ## logout
 - requires token
 - that wont be an endpoint just delete the token i guess
@@ -51,10 +51,12 @@
 - get
 - requires tokens => 401
 - out: posts that are filtered (username, title, description, plantName, media, sell)
-##
-## getPlanst
+## getPlants
 - get
-- out: all pants 
+- out: all pants ()
+## getPlants\{user}
+- get
+- out: plants for user()
 ## getPlant\{plantnumber}
 - get
 - out: one plant(by id) - all data
