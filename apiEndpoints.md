@@ -1,4 +1,4 @@
-# Endpioints
+# Endpoints
 ## register
 - post
 - in: email, username, hash(password)
@@ -30,7 +30,7 @@
 ## getContact/{user}
 - get
 - requires token = > 401 unautorized
-- out: 200 conatct details
+- out: 200 conatct details()
 ## newPost
 - put
 - requires token to owner acount = > 401 unautorized 
@@ -60,6 +60,10 @@
 ## getPlant\{plantnumber}
 - get
 - out: one plant(by id) - all data
+## newArticle
+ - put
+ - requires authorized token => 401
+ - 
 ## getArticle\{articlenumber}
 - get
 - out: link to article.html on  the server?
