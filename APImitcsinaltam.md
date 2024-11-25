@@ -175,52 +175,7 @@ require base_path('routes/graphql.php');
 
 
 ## 3. Define the GraphQL 
-### Schema in `graphql/schema.graphql`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Schema done in `graphql/schema.graphql`
 
 
 ### Queries
@@ -243,7 +198,6 @@ type Query {
 Define mutations for data manipulation:
 
 ```php
-Kód másolása
 type Mutation {
     createUser(username: String!, email: String!, password: String!, city: String, birthdate: String): User
     createPost(user_id: Int!, title: String!, description: String!, city: String, plant: Int, media: String, sell: Boolean): Post
@@ -259,6 +213,14 @@ type Mutation {
 
 ## 4. Create Resolvers
 Resolvers connect GraphQL operations to your Laravel models.
+1. Create the Folder Structure
+You need to create the `app/GraphQL/Queries` directory
+
+```cmd
+app/
+├── GraphQL/
+│   ├── Queries/
+```
 
 ### **Example: Query Resolver**
 For `users` query:
@@ -266,6 +228,7 @@ For `users` query:
 #### 1. Create app/GraphQL/Queries/UsersQuery.php:
 
 ```php
+<?php
 namespace App\GraphQL\Queries;
 
 use App\Models\User;
@@ -309,6 +272,10 @@ class CreateUserMutation {
     }
 }
 ```
+
+<hr>
+
+# Itt tartok
 
 #### 2. Link it in the schema:
 

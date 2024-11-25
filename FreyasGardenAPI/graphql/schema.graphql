@@ -41,3 +41,21 @@ type Post {
     media: String
     sell: Boolean
 }
+
+
+type Query {
+    users: [User] @field(resolver: "App\\GraphQL\\Queries\\UsersQuery@resolve")
+    user(id: ID!): User
+    posts: [Post]
+    post(id: ID!): Post
+    plants: [Plant]
+    plant(id: ID!): Plant
+    articles: [Article]
+    article(id: ID!): Article
+}
+
+type Mutation {
+    createUser(username: String!, email: String!, password: String!, city: String, birthdate: String): User
+    createPost(user_id: Int!, title: String!, description: String!, city: String, plant: Int, media: String, sell: Boolean): Post
+    createPlant(name: String!, latin_name: String!): Plant
+}
