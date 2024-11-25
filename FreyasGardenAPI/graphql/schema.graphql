@@ -1,0 +1,43 @@
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    city: String
+    birthdate: String
+    role: Role
+    active: Boolean
+    plants: [Plant]
+    posts: [Post]
+}
+
+type Role {
+    id: ID!
+    role_name: String!
+}
+
+type Plant {
+    id: ID!
+    name: String!
+    latin_name: String
+    articles: [Article]
+    owners: [User]
+}
+
+type Article {
+    id: ID!
+    title: String!
+    plant_id: Int
+    source: String!
+    plant: Plant
+}
+
+type Post {
+    id: ID!
+    user_id: Int!
+    city: String
+    title: String!
+    plant: Plant
+    description: String
+    media: String
+    sell: Boolean
+}
