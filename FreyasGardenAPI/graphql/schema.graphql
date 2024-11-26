@@ -55,7 +55,7 @@ type Query {
 }
 
 type Mutation {
-    createUser(username: String!, email: String!, password: String!, city: String, birthdate: String): User
+    createUser(username: String!, email: String!, password: String!, city: String, birthdate: String): User @field(resolver: "App\\GraphQL\\Mutations\\CreateUserMutation@resolve")
     createPost(user_id: Int!, title: String!, description: String!, city: String, plant: Int, media: String, sell: Boolean): Post
     createPlant(name: String!, latin_name: String!): Plant
 }

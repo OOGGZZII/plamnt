@@ -2,12 +2,16 @@
 
 use Nuwave\Lighthouse\Support\Http\Middleware\AcceptJson;
 use Illuminate\Support\Facades\Route;
-use Nuwave\Lighthouse\Http\Controllers\GraphQLController;
+
 
 Route::prefix('graphql')
-    ->middleware([AcceptJson::class])
-    ->group(base_path('routes/graphql.php'));
+    // ->middleware([AcceptJson::class]) // Apply middleware for JSON handling
+    ->group(function () {
+        Route::post('/', function () {
+            return app('graphql')->handle(); // Lighthouse handles GraphQL requests internally
+        });
 
-Route::post('/', [\Nuwave\Lighthouse\Http\Controllers\GraphQLController::class, 'query']);
-Route::get('/playground', [GraphQLController::class, 'playground']);
-// Route::post('/', [GraphQLController::class, 'query']);
+        Route::get('/playground', function () {
+            return view('lighthouse-playground'); // Serve the Playground view
+        });
+    });

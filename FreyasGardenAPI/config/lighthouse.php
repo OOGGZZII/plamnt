@@ -1,6 +1,13 @@
 <?php declare(strict_types=1);
 
 return [
+
+    // Playground configuration
+    'playground' => [
+        'enabled' => true, // Enable the Playground
+        'path' => '/graphql/playground', // Path for the Playground
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Route Configuration
@@ -12,35 +19,15 @@ return [
     |
     */
 
+    // Route configuration
     'route' => [
-        /*
-         * The URI the endpoint responds to, e.g. mydomain.com/graphql.
-         */
-        'uri' => '/graphql',
-
-        /*
-         * Lighthouse creates a named route for convenient URL generation and redirects.
-         */
-        'name' => 'graphql',
-
-        /*
-         * Beware that middleware defined here runs before the GraphQL execution phase,
-         * make sure to return spec-compliant responses in case an error is thrown.
-         */
+        'uri' => '/graphql', // Path for GraphQL endpoint
+        'name' => 'graphql', // Named route for GraphQL
         'middleware' => [
-            // Ensures the request is not vulnerable to cross-site request forgery.
-            // Nuwave\Lighthouse\Http\Middleware\EnsureXHR::class,
-
-            // Always set the `Accept: application/json` header.
-            Nuwave\Lighthouse\Http\Middleware\AcceptJson::class,
-
-            // Logs in a user if they are authenticated. In contrast to Laravel's 'auth'
-            // middleware, this delegates auth and permission checks to the field level.
-            Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
-
-            // Logs every incoming GraphQL query.
-            // Nuwave\Lighthouse\Http\Middleware\LogGraphQLQueries::class,
+            'api', // Ensure the 'api' middleware is applied
+            // Nuwave\Lighthouse\Http\Middleware\AcceptJson::class, // Handles JSON requests
         ],
+
 
         /*
          * The `prefix`, `domain` and `where` configuration options are optional.

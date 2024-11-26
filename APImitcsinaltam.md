@@ -1,4 +1,3 @@
-
 ## User
 ### Modify the User *Model* - ez már létezik alapból
 The User model needs to be updated to reflect the fields in the user table and the relationship with the roles table. Here's how to modify the User model:
@@ -44,10 +43,10 @@ class User extends Authenticatable
 }
 ```
 #### Explanation:
-- fillable: Specifies which fields are mass-assignable (to prevent mass-assignment vulnerabilities). Here, we added username, email, password, city, birthdate, role_id, and active.
-- hidden: Password and the remember_token are hidden by default when the User model is returned (e.g., in an API response).
-- dates: Specifies that birthdate should be treated as a Carbon date instance.
-- Relationship: We've added a role() method, which defines the relationship between the User model and the Role model (which you’ll create for the roles table).
+- **fillable**: Specifies which fields are mass-assignable (to prevent mass-assignment vulnerabilities). Here, we added username, email, password, city, birthdate, role_id, and active.
+- **hidden**: Password and the remember_token are hidden by default when the User model is returned (e.g., in an API response).
+- **dates**: Specifies that birthdate should be treated as a Carbon date instance.
+- **Relationship**: We've added a role() method, which defines the relationship between the User model and the Role model (which you’ll create for the roles table).
 
 
 ### Create a *Migration* for User Table
@@ -113,46 +112,50 @@ In Laravel 11, the `RouteServiceProvider` file no longer exists as it did in pre
 Create a new file in the **routes directory**, for example, `routes/graphql.php`. This will hold your GraphQL routes.
 
 Ensure the `routes/graphql.php` file exists and contains the routes for your GraphQL server. 
-The most critical route to define is the one pointing to the GraphQLController for processing queries.
+
 
 ```php
 <?php
+
 use Nuwave\Lighthouse\Support\Http\Middleware\AcceptJson;
 use Illuminate\Support\Facades\Route;
-use Nuwave\Lighthouse\Http\Controllers\GraphQLController;
+
 
 Route::prefix('graphql')
-    ->middleware([AcceptJson::class])
-    ->group(base_path('routes/graphql.php'));
+    ->middleware([AcceptJson::class]) // Apply middleware for JSON handling
+    ->group(function () {
+        Route::post('/', function () {
+            return app('graphql')->handle(); // Lighthouse handles GraphQL requests internally
+        });
 
-Route::post('/', [\Nuwave\Lighthouse\Http\Controllers\GraphQLController::class, 'query']);
-Route::get('/playground', [GraphQLController::class, 'playground']);
-
-// Route::post('/', [GraphQLController::class, 'query']);
+        Route::get('/playground', function () {
+            return view('lighthouse-playground'); // Serve the Playground view
+        });
+    });
 ```
 
+#### **Explanation:**
+- **Playground View**: The view('lighthouse-playground') function serves Lighthouse's built-in Playground interface. You don't need a controller for this.
 
-#### **The Code Breakdown**
-- **Importing Middleware**: The AcceptJson middleware ensures that incoming requests are in JSON format (a requirement for GraphQL queries).
-If a client doesn't send requests in JSON format, the middleware will reject them.
-**Middleware**:
-Middleware are classes that sit between the request and the application logic. They process incoming requests before they reach the controller or other logic.
-Example: Middleware can handle authentication, modify requests, or enforce specific formats (like ensuring requests are in JSON).
+- **GraphQL Query Handling:** The app('graphql')->handle() method directly invokes Lighthouse's internal handler for executing GraphQL queries.
 
-- **Route Prefix**: prefix('graphql') specifies that all routes under this group will start with /graphql. For example:
-/graphql will be the endpoint for sending queries or mutations.
+- **Middleware:** The AcceptJson::class middleware ensures that only requests with the Accept: application/json header are allowed.
 
-- **Middleware Assignment**: The middleware([AcceptJson::class]) applies the AcceptJson middleware to all routes within the group. This ensures only JSON requests are processed.
-  
-- **Route Grouping**: group(base_path('routes/graphql.php')) includes a separate file (routes/graphql.php) that defines the GraphQL routes.
-This is a modular approach, keeping the main route file clean and separating concerns.
 
-#### **Additional Configuration (Optional)**
-If you want to add a playground or introspection route, you can extend your graphql.php file with routes like:
+
+
+Or, if you're using Lighthouse's built-in configuration:
 
 ```php
-Route::get('/playground', [GraphQLController::class, 'playground']);
+// Rely entirely on Lighthouse's routing by removing custom routes from `graphql.php`.
+// Ensure `config/lighthouse.php` is properly configured:
+'route' => [
+    'uri' => '/graphql',
+    'middleware' => ['api'],
+],
+
 ```
+
 
 !If your GraphQL endpoint requires ***custom middleware (e.g., authentication)***, you can define it in the middleware array during route registration in the graphql.php file.!
 
@@ -166,8 +169,21 @@ Since Laravel 11 doesn’t use RouteServiceProvider, you’ll need to include th
 artisan install:api
 ```
 
-***In `routes/api.php`, add:***
+***`routes/api.php`***
 ```php
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+
+// | Here is where you can register API routes for your application. These
+// | routes are typically stateless and use the "api" middleware group.
+
 require base_path('routes/graphql.php');
 ```
 
@@ -204,10 +220,6 @@ type Mutation {
     createPlant(name: String!, latin_name: String!): Plant
 }
 ```
-
-
-
-<hr>
 
 
 
@@ -275,8 +287,6 @@ class CreateUserMutation {
 
 <hr>
 
-# Itt tartok
-
 #### 2. Link it in the schema:
 
 ```php
@@ -284,6 +294,160 @@ type Mutation {
     createUser(username: String!, email: String!, password: String!, city: String, birthdate: String): User @field(resolver: "App\\GraphQL\\Mutations\\CreateUserMutation@resolve")
 }
 ```
+
+
+
+<hr>
+
+
+
+## Próbálom futtatni, errorokat oldok meg
+Ensure your lighthouse.php configuration file allows the Playground to be served. Check the config/lighthouse.php file and verify the following settings:
+
+### 1. a /graphql/lighthouse not found 
+`config/lighhouse.php`
+
+```php
+'route' => [
+    'uri' => '/graphql', // Base URI for GraphQL
+    'name' => 'graphql', // Named route for convenience
+    'middleware' => [
+        'api', // Default Laravel API middleware group
+        Nuwave\Lighthouse\Http\Middleware\AcceptJson::class,
+        Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
+    ],
+],
+
+'playground' => [
+    'enabled' => true, // Enable the Playground
+    'path' => '/graphql/playground', // Path for the Playground
+],
+```
+
+
+#### Changes in Lighthouse Route Handling:
+
+
+**Updated Configuration**
+***Replace your graphql.php*** file with the following, relying on Lighthouse's internal routing:
+
+
+
+#### Next Steps
+**Verify Lighthouse Configuration:** Ensure your `config/lighthouse.php` file is correctly set up, especially the route and playground sections:
+
+```php
+'route' => [
+    'uri' => '/graphql',
+    'middleware' => ['api'],
+],
+
+'playground' => [
+    'enabled' => true,
+    'path' => '/graphql/playground',
+],
+```
+
+**Clear Cache**: 
+```cmd
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan route:cache
+```
+
+**Test is there is a registered route**
+```cmd
+php artisan route:list
+```
+Ensure you see entries for /graphql and /graphql/playground.
+
+Look for routes similar to:
+
+```cmd
+Method	    URI	Name	            Action
+---------------------------------------------
+POST	    graphql		            Closure
+GET	        graphql/playground		Closure
+```
+
+
+
+
+nincs playground idc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <hr>
