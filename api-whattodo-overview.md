@@ -127,6 +127,11 @@ Schema::table('users', function (Blueprint $table) {
 
 Run the migration: `php artisan migrate`
 
+<hr>
+
+# innen lehet érdekes
+
+
 ### 3. Role-Based Middleware
 
 Create a custom middleware to restrict access based on roles.
