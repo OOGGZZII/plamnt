@@ -6,10 +6,10 @@ apiban egyelőre össze vissza vannak a responsek, idk idk
 - 404 (Not Found)
 - 400 (Bad Request)
 - 401 (Not Authorised)
-### GET: 
+### GET 
 - 200 (OK) + data
-### POST : (mostly to create new resource, called on a collection)
-- 201 (Created) + ‘Location’ header (ex.: with link to /users/12/posts/{id} containing new ID)
+### POST (mostly to create new resource, called on a collection ex: `users/12/posts`)
+- 201 (Created) + ‘Location’ header (ex.: with link to `/users/12/posts/{id}` containing new ID)
 - 200 (OK) - pl login, since we are not creating a new resource
   - *"Many times, the action performed by the POST method might not result in a resource that can be identified by a URI. In this case, either HTTP response code 200 (OK) or 204 (No Content) is the appropriate response status."*
 ### DELETE
@@ -18,12 +18,16 @@ apiban egyelőre össze vissza vannak a responsek, idk idk
 <hr>
 
 ## LoginPage
-### register
-- post
-- in: email, username, hash(password)
-- out: 200 ok (email megerősítés)/ 400 
+### `POST : /users/` - resgistration
+*ebben nem vagyok biztos, így gondolom de majd a levi tudja videóbol pl ugy is*
+(email megerősítés)
+in: 
+- email,
+- username,
+- password (hash?)
+out: 201 created 
 
-### ***POST: user/login***
+### ***`POST: /user/login`***
 in:
 - email / (username), 
 - password, 
@@ -32,32 +36,46 @@ out good request:
 - token (tokenben benne van az adminlevel)
 - user
 out bad request:
--  401, message: incorrect email or password
-
-### logout
-- requires token
-- that wont be an endpoint just delete the token i guess
-### passwordReset
+-  401, message: incorrect credentials
+  
+### passwordReset ??
 - not a clue in the word
 
 <hr>
 
-## profilpage (ott vannak a fieldek, alján mentés gomb, mentésre azt küldjük tovább ami változott)
-### PATCH: api/user (api/profile?)
+## ProfilePage (ott vannak a fieldek, alján mentés gomb, mentésre azt küldjük tovább ami változott)
+### `PATCH: /user` or `PATCH: /users/{username}` (/profile?)
 - requires token to owner acount = > 401 unautorized ?
 in: (pl)
 - email
 - city
 out: 200 ok / 400 bad request
 
-- 
-## getContact/{user}
+### + logout ??
+- requires token
+- that wont be an endpoint just delete the token i guess
+
+<hr>
+
+## PostsPage / Marketplace / Listings (a grid view)
+kérdés hogy hogyan továbbítjuk az aktuális felhasználót. adná magát a /users/{username}/... de lehet hogy pl az aktuális tokent lekérni egyszerűbb/úgy kell
+### `GET posts/search?q=user+search+terms` filtering is valahogy
+- requires token ?? => 401
+out: posts that are found
+- (username, title, description, plantName, media, sell)
+
+<hr>
+
+## PostDetailsPage
+### `GET: /{user}/contactinfo` ?? telszám, email
 - get
 - requires token = > 401 unautorized
 - out: 200 conatct details()
 
-# PostsPage 
-## POST : `/api/post`
+<hr>
+  
+## MyPostsPage
+### `POST : /posts` or `POST : users/{username}/posts` - új poszt létrehozása gomb 
 - requires token to owner acount = > 401 unautorized  ?
 in:
 - city(optional),
@@ -67,35 +85,30 @@ in:
 - media(optional),
 - sell
 out: 200 ok / 400 incorrert type or insuficent information(bad request)
-## delPost
-- delete
-- requires token to owner acount = > 401 unautorized
-## getPost
-- get
-- requires token = > 401 unatorized
-- out: all posts(username, title, description, plantName, media, sell)
-## searchPost  search?q=user+search+terms
-- get
-- requires token => 401
-- out: posts that are found (username, title, description, plantName, media, sell)
-## filterPost
-- get
-- requires tokens => 401
-- out: posts that are filtered (username, title, description, plantName, media, sell)
-## getPlants
+
+### GET posts/search?q=....username={username}
+fejjebb megírt get használata a saját posztok lekérésére
+
+### `DELETE posts/{postid}`
+- requires token to owner account = > 401 unautorized
+
+ <hr>
+
+## plantek, articlek, később ig
+nem írtam át még őket
+### getPlants
 - get
 - out: all pants ()
-## getPlants\{user}
+### getPlants\{user}
 - get
 - out: plants for user()
-## getPlant\{plantnumber}
+### getPlant\{plantnumber}
 - get
 - out: one plant(by id) - all data
-## newArticle
+### newArticle
  - put
  - requires authorized token => 401
- - 
-## getArticle\{articlenumber}
-- get
-- out: link to article.html on  the server?
-- 
+
+
+
+
