@@ -89,6 +89,13 @@ out: 200 ok / 400 incorrert type or insuficent information(bad request)
 ### GET posts/search?q=....username={username}
 fejjebb megírt get használata a saját posztok lekérésére
 
+## Website
+### GET /articles (with filter) 
+- all the matching articles (short descripition, these will be on "small" cards)
+### GET /article/{title}
+- gets all the data of the selected articles
+
+
 ### `DELETE posts/{postid}`
 - requires token to owner account = > 401 unautorized
 
