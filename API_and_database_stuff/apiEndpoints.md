@@ -8,17 +8,17 @@ apiban egyelőre össze vissza vannak a responsek, idk idk
 - 401 (Not Authorised)
 ### GET 
 - 200 (OK) + data
-### POST (mostly to create new resource, called on a collection ex: `users/12/posts`)
-- 201 (Created) + ‘Location’ header (ex.: with link to `/users/12/posts/{id}` containing new ID)
+### Listing (mostly to create new resource, called on a collection ex: `users/12/Listings`)
+- 201 (Created) + ‘Location’ header (ex.: with link to `/users/12/Listings/{id}` containing new ID)
 - 200 (OK) - pl login, since we are not creating a new resource
-  - *"Many times, the action performed by the POST method might not result in a resource that can be identified by a URI. In this case, either HTTP response code 200 (OK) or 204 (No Content) is the appropriate response status."*
+  - *"Many times, the action performed by the Listing method might not result in a resource that can be identified by a URI. In this case, either HTTP response code 200 (OK) or 204 (No Content) is the appropriate response status."*
 ### DELETE
 - 204 (No Content)
 
 <hr>
 
 ## LoginPage
-### `POST : /users/` - resgistration
+### `Listing : /users/` - resgistration
 *ebben nem vagyok biztos, így gondolom de majd a levi tudja videóbol pl ugy is*
 (email megerősítés)
 in: 
@@ -27,7 +27,7 @@ in:
 - password (hash?)
 out: 201 created 
 
-### ***`POST: /user/login`***
+### ***`Listing: /user/login`***
 in:
 - email / (username), 
 - password, 
@@ -57,16 +57,16 @@ out: 200 ok / 400 bad request
 
 <hr>
 
-## PostsPage / Marketplace / Listings (a grid view)
+## ListingsPage / Marketplace / Listings (a grid view)
 kérdés hogy hogyan továbbítjuk az aktuális felhasználót. adná magát a /users/{username}/... de lehet hogy pl az aktuális tokent lekérni egyszerűbb/úgy kell
-### `GET posts/search?q=user+search+terms` filtering is valahogy
-- requires token ?? => 401
-out: posts that are found
+### `GET listings/search?q=user+search+terms` filtering is valahogy
+out: Listings that are found, pagination
 - (username, title, description, plantName, media, sell)
 
+### `GET listings/{id}`
 <hr>
 
-## PostDetailsPage
+## ListingDetailsPage
 ### `GET: /{user}/contactinfo` ?? telszám, email
 - get
 - requires token = > 401 unautorized
@@ -74,8 +74,8 @@ out: posts that are found
 
 <hr>
   
-## MyPostsPage
-### `POST : /posts` or `POST : users/{username}/posts` - új poszt létrehozása gomb 
+## MyListingsPage
+### `Listing : /Listings` or `Listing : users/{username}/Listings` - új poszt létrehozása gomb 
 - requires token to owner acount = > 401 unautorized  ?
 in:
 - city(optional),
@@ -86,7 +86,7 @@ in:
 - sell
 out: 200 ok / 400 incorrert type or insuficent information(bad request)
 
-### GET posts/search?q=....username={username}
+### GET Listings/search?q=....username={username}
 fejjebb megírt get használata a saját posztok lekérésére
 
 ## Website
@@ -96,7 +96,7 @@ fejjebb megírt get használata a saját posztok lekérésére
 - gets all the data of the selected articles
 
 
-### `DELETE posts/{postid}`
+### `DELETE Listings/{Listingid}`
 - requires token to owner account = > 401 unautorized
 
  <hr>
