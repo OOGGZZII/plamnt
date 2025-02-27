@@ -1,0 +1,303 @@
+/* TODO:
+- header háttér (afterrel, a rudolfosból ki tudom másolni)
+- minden más lmao */
+
+
+/* FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+:root {
+    --clr-bg: #FCF6EE;
+    --clr-text: #181818;
+    --clr-orange: #d15439;
+    --clr-burgundy: #711815;
+    --clr-green: #426B1F;
+    --clr-green-2: #81D366;
+    --clr-green-3: #DFF29D;
+    --clr-dark-green: #0F4020;
+    /* --clr-bg-light: #fcf6ee; */
+    /* --clr-highlight: rgb(113, 147, 242);
+    --clr-error: rgb(255, 67, 67);
+    --clr-success: rgb(12, 211, 38); */
+
+    --clr-nav: var(--clr-text);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    scroll-behavior: smooth;
+    background-color: var(--clr-bg);
+    font-weight: 300;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--clr-text);
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+    /* position: relative; */
+}
+
+
+main {
+    padding: 5rem;
+}
+
+footer {
+    padding: 20px;
+    background-color: var(--clr-text);
+    color: var(--clr-bg);
+    bottom: 0;
+    width: 100%;
+}
+
+/* HEADER */
+.header-main {
+    position: relative;
+    background: url("../img/hero1.webp") no-repeat center/cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--clr-bg);
+}
+
+.header-main::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+
+    /* background: linear-gradient(10deg, var(--clr-yellow-dark), var(--clr-green) 60%); */
+    /* background: linear-gradient(to bottom, var(--clr-black), var(--clr-green-light));
+    opacity: .6; */
+}
+
+.header-main * {
+    position: relative;
+    z-index: 1;
+}
+
+.header-title {
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+.header-text {
+    font-size: 1.5rem;
+}
+
+/* ACCOMPLISHMENTS STRIP */
+.accomplishments-strip {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding: 2rem 0;
+    background: var(--clr-dark-green);
+    color: var(--clr-bg);
+}
+
+.accomplishments-strip div span {
+    font-size: 2rem;
+    font-weight: bold;
+    display: inline-block;
+}
+
+/* ARTICLES STRIP */
+.articles-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    /* gap: 1rem; */
+    border-collapse: collapse;
+    padding: 2rem;
+    border-top: 2px solid var(--clr-dark-green);
+    border-bottom: 2px solid var(--clr-dark-green);
+}
+
+.articles-strip .card {
+    padding: 1rem;
+    border: 1px solid var(--clr-dark-green);
+    background: var(--clr-bg);
+    margin-right: -1px;
+}
+
+.articles-strip h2 {
+    grid-column: span 4;
+    text-align: left;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 2px solid var(--clr-dark-green);
+    background-color: var(--clr-dark-green);
+    color: var(--clr-bg);
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: var(--clr-bg);
+    color: var(--clr-dark-green);
+}
+
+.btn-primary {
+    background-color: var(--clr-burgundy);
+    border-color: var(--clr-burgundy);
+}
+
+.btn-primary:hover {
+    /* background-color: var(--clr-bg);
+    color: var(--clr-orange); */
+    background-color: var(--clr-orange);
+    border-color: var(--clr-orange);
+}
+
+.btn-green {
+    background-color: var(--clr-green);
+    border-color: var(--clr-green);
+}
+
+.btn-green:hover {
+    background-color: var(--clr-green-2);
+    border-color: var(--clr-green-2);
+    /* color: var(--clr-accent); */
+}
+
+a {
+    transition: all .2s linear;
+}
+
+/* NAV */
+/* NAV -----------------------------------------------------------------------------------------------------------------------------------------------------*/
+nav {
+    /* background-color: var(--clr-bg); */
+    padding: 0 5vw;
+    color: var(--clr-bg);
+}
+
+nav a {
+    text-decoration: none;
+    padding: 1rem 2rem;
+    display: block;
+}
+
+/* nav a::after {
+    border-bottom: 1px solid var(--clr-bg);
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+} */
+
+/* Hover effect for links */
+/* nav a:hover {
+    background-color: var(--clr-orange);
+    border-radius: 5px;
+} */
+
+.nav-logo {
+    margin-right: auto;
+}
+
+/* .border-left {
+    border-left: 2px solid var(--clr-dark-green);
+} */
+
+.main-nav {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+
+    align-items: center;
+
+}
+
+.navbar-toggler {
+    display: none;
+    padding: 15px;
+}
+
+.nav-first-row {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+@media screen and (max-width: 800px) {
+
+    .main-nav {
+        flex-direction: column;
+        background-color: var(--clr-nav);
+        position: relative;
+        transition: all .2s;
+    }
+
+    .main-nav[data-state="closed"] a {
+        display: none;
+    }
+
+    .main-nav[data-state="open"] a {
+        display: block;
+
+    }
+
+    .main-nav[data-state="open"] .nav-first-row {
+        border-bottom: 1px solid rgba(255 255 255 /0.3);
+    }
+
+    .navbar-toggler {
+        display: block !important;
+        /* position: fixed;
+        top: 0;
+        right: 0; */
+    }
+
+    .nav-logo {
+        margin-right: 0px;
+        width: 100%;
+
+        display: block !important;
+    }
+
+    /* .main-nav[data-state="closed"] .nav-logo {
+        margin-right: 0px;
+        width: 100%;
+        display: block;
+    } */
+}
+
+
+
+.main-nav[data-scrolled="true"] {
+    background-color: var(--clr-nav);
+}
+
+nav a {
+    margin: 0;
+    padding: 2.4vh 1em;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--clr-white);
+    font-weight: light;
+
+    /* mix-blend-mode: difference; */
+}
